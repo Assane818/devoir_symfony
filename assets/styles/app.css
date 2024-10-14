@@ -4,4 +4,16 @@
 
 body {
     background-color: #080126;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+header {
+    position: fixed; /* Utiliser fixed pour le garder en haut */
+    top: 0; /* Le placer en haut de la page */
+    left: 64px; /* Ajustez selon la largeur de votre sidebar */
+    right: 0; /* S'étendre sur toute la largeur */
+    z-index: 50; /* Assurez-vous que cela soit au-dessus de la sidebar */
 }

@@ -1,73 +1,141 @@
 {% extends 'base.html.twig' %}
-
 {% block body %}
-<!-- Tableau des Clients -->
-<div class="flex w-full h-screen justify-center items-center bg-gradient-to-r from-red-500 to-red-700"> <!-- Fond en dégradé -->
-    <div class=" w-3/5 bg-blue-900 rounded-lg shadow-lg flex flex-col  space-y-8 ml-48 items-center p-10"> <!-- Conteneur principal -->
-        <h2 class="text-2xl text-center font-bold text-gray-800">Gestion des Clients</h2>
+<!-- Conteneur pour le titre -->
+<div class="flex justify-center items-center w-4/5 h-screen">
+    <div class="flex flex-col sm:rounded-lg items-end w-9/12 bg-gray-100 p-5 ml-28 shadow-lg mt-12"
+        style="height: 75vh; max-height: 75vh; border: 2px solid #e2e8f0; border-radius: 10px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);">
 
-        <div class="flex justify-between"> <!-- Conteneur du formulaire et de la liste -->
-            <!-- Formulaire -->
-            <div class="w-1/2 bg-gray-100 border border-gray-300 rounded-lg p-6 shadow-md"> 
-                <h3 class="text-xl mb-4 text-center font-semibold text-gray-800">Ajouter un Client</h3>
-                <form class="space-y-4">
-                    <div>
-                        <label for="first-name" class="block text-gray-600">Prénom</label>
-                        <input type="text" id="first-name" name="first-name" required
-                            class="w-full p-3 rounded bg-gray-200 border border-gray-400 focus:outline-none focus:border-blue-500" />
-                    </div>
-                    <div>
-                        <label for="last-name" class="block text-gray-600">Nom</label>
-                        <input type="text" id="last-name" name="last-name" required
-                            class="w-full p-3 rounded bg-gray-200 border border-gray-400 focus:outline-none focus:border-blue-500" />
-                    </div>
-                    <div>
-                        <label for="phone" class="block text-gray-600">Téléphone</label>
-                        <input type="tel" id="phone" name="phone" required
-                            class="w-full p-3 rounded bg-gray-200 border border-gray-400 focus:outline-none focus:border-blue-500" />
-                    </div>
-                    <div>
-                        <label for="address" class="block text-gray-600">Adresse</label>
-                        <textarea id="address" name="address" required
-                            class="w-full p-3 rounded bg-gray-200 border border-gray-400 focus:outline-none focus:border-blue-500 resize-none h-24"></textarea>
-                    </div>
-                    <button type="submit"
-                        class="w-full bg-blue-600 text-white p-3 rounded hover:bg-blue-800 transition duration-300">Soumettre</button>
-                </form>
-            </div>
-
-            <!-- Liste des Clients -->
-            <div class="w-1/2 bg-gray-100 border border-gray-300 rounded-lg p-6 shadow-md ml-16"> 
-                <h3 class="text-xl mb-4 text-center font-semibold text-gray-800">Liste des Clients</h3>
-                <table class="min-w-full text-left text-sm">
-                    <thead class="bg-gray-300">
-                        <tr>
-                            <th class="py-2 px-4 text-gray-800">Prénom</th>
-                            <th class="py-2 px-4 text-gray-800">Nom</th>
-                            <th class="py-2 px-4 text-gray-800">Téléphone</th>
-                            <th class="py-2 px-4 text-gray-800">Adresse</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr class="bg-gray-200">
-                            <td class="py-2 px-4 text-gray-800">Jean</td>
-                            <td class="py-2 px-4 text-gray-800">Dupont</td>
-                            <td class="py-2 px-4 text-gray-800">0123456789</td>
-                            <td class="py-2 px-4 text-gray-800">10 rue de Paris</td>
-                        </tr>
-                        <tr class="bg-gray-300">
-                            <td class="py-2 px-4 text-gray-800">Marie</td>
-                            <td class="py-2 px-4 text-gray-800">Curie</td>
-                            <td class="py-2 px-4 text-gray-800">0987654321</td>
-                            <td class="py-2 px-4 text-gray-800">20 avenue de Lyon</td>
-                        </tr>
-                        <!-- Ajoutez d'autres clients ici -->
-                    </tbody>
-                </table>
-            </div>
+        <!-- Titre du tableau en haut du cadre -->
+        <div class="w-full bg-gray-200 rounded-lg p-4 shadow-md mb-5">
+            <h2 class="text-xl font-semibold text-gray-800 text-center">Liste des Clients</h2>
         </div>
+
+        <!-- Formulaire de recherche -->
+        <div class="w-full flex -mb-6 justify-start">
+            <div>{{ form_start(formClientSearch) }}</div>
+            {{ form_row(formClientSearch.username, {
+                'attr': {
+                    'class': 'px-2 py-2 border border-blue-600 rounded-lg mr-2 h-9 text-gray-700 focus:outline-none shadow-lg focus:shadow-indigo-700',
+                    'placeholder': 'Username'
+                }
+            }) }}
+            
+            {{ form_row(formClientSearch.telephone, {
+                'attr': {
+                    'class': 'px-4 py-2 border border-blue-600 rounded-lg mr-2 h-9 text-gray-700 focus:outline-none shadow-lg focus:shadow-indigo-700',
+                    'placeholder': 'Téléphone'
+                }
+            }) }}
+            {{ form_row(formClientSearch.search, {
+                'attr': {
+                    'class': 'px-4 text-white bg-blue-600 rounded hover:bg-blue-500 transition duration-300 h-9 shadow-lg'
+                }
+            })}}
+            {{ form_end(formClientSearch) }}
+        </div>
+        
+
+        <button class="flex justify-end px-6 pt-4 mb-4 mt-2">
+            <a href="{{ path('clients.store') }}"
+                class="px-4 py-2 text-white bg-blue-600 rounded hover:bg-blue-500 transition duration-300 shadow-lg">Ajouter</a>
+        </button>
+
+        <!-- Conteneur pour la table avec max-height pour la limite de taille et overflow-y-auto pour le scroll -->
+        <div class="w-full overflow-y-auto max-h-96 bg-white rounded-lg shadow-lg">
+            <table class="p-10 w-full text-sm text-left rtl:text-right text-gray-700">
+                <thead class="text-xs text-gray-700 uppercase bg-gray-200">
+                    <tr>
+                        <th scope="col" class="px-6 py-3">#</th>
+                        <th scope="col" class="px-6 py-3">Nom</th>
+                        <th scope="col" class="px-6 py-3">Prénom</th>
+                        <th scope="col" class="px-6 py-3">UserName</th>
+                        <th scope="col" class="px-6 py-3">Téléphone</th>
+                        <th scope="col" class="px-6 py-3">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for client in clients %}
+                    <tr class="odd:bg-gray-100 even:bg-gray-50 border-b border-gray-300">
+                        <th scope="row" class="px-6 py-4 font-medium text-gray-800 whitespace-nowrap">{{ client.id }}</th>
+                        {% if client.users %}
+                        <td class="px-6 py-4">{{ client.users.nom }}</td>
+                        {% else %}
+                        <td class="px-6 py-4"></td>
+                        {% endif %}
+                        {% if client.users %}
+                        <td class="px-6 py-4">{{ client.users.prenom }}</td>
+                        {% else %}
+                        <td class="px-6 py-4"></td>
+                        {% endif %}
+                        <td class="px-6 py-4">{{ client.username }}</td>
+                        <td class="px-6 py-4">{{ client.telephone }}</td>
+                        <td class="px-6 py-4">
+                            <a href="#" class="font-medium text-blue-600 hover:text-blue-500 transition duration-300">Edit</a>
+                        </td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="6" class="px-6 py-4 text-center text-gray-500">Aucun client trouvé.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Pagination toujours visible sous le tableau -->
+        <div class="flex justify-center items-center w-full mt-4">
+            <nav aria-label="Page navigation">
+                <ul class="inline-flex items-center -space-x-px">
+                    {# Lien vers la page précédente #}
+                    <li>
+                        {% if currentPage > 1 %}
+                            <a href="{{ path(app.request.attributes.get('_route'), app.request.query.all | merge({'page': currentPage - 1})) }}"
+                               class="px-3 py-2 text-gray-700 bg-gray-300 border border-gray-400 rounded-l-lg hover:bg-gray-400 transition duration-300">
+                                Previous
+                            </a>
+                        {% else %}
+                            <span class="px-3 py-2 text-gray-700 bg-gray-200 border border-gray-300 rounded-l-lg cursor-not-allowed">
+                                Previous
+                            </span>
+                        {% endif %}
+                    </li>
+        
+                    {# Affichage des pages #}
+                    {% for page in 1..totalPages %}
+                        <li>
+                            <a href="{{ path(app.request.attributes.get('_route'), app.request.query.all | merge({'page': page})) }}"
+                               class="px-3 py-2 text-gray-700 bg-gray-300 border border-gray-400 hover:bg-gray-400 transition duration-300 {{ currentPage == page ? 'bg-blue-500 text-white' : '' }}">
+                                {{ page }}
+                            </a>
+                        </li>
+                    {% endfor %}
+        
+                    {# Lien vers la page suivante #}
+                    <li>
+                        {% if currentPage < totalPages %}
+                            <a href="{{ path(app.request.attributes.get('_route'), app.request.query.all | merge({'page': currentPage + 1})) }}"
+                               class="px-3 py-2 text-gray-700 bg-gray-300 border border-gray-400 rounded-r-lg hover:bg-gray-400 transition duration-300">
+                                Next
+                            </a>
+                        {% else %}
+                            <span class="px-3 py-2 text-gray-700 bg-gray-200 border border-gray-300 rounded-r-lg cursor-not-allowed">
+                                Next
+                            </span>
+                        {% endif %}
+                    </li>
+                </ul>
+            </nav>
+        </div>
+        
     </div>
 </div>
+
+
+
+
+
+
+
 
 
 
