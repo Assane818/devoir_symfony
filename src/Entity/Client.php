@@ -16,8 +16,9 @@ class Client
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 12)]
+    #[ORM\Column(length: 25)]
     #[Assert\NotBlank(message: "Saisir le telephone")]
+    #[Assert\Length(min: 9, exactMessage: "Le numero doit contenir 9 chiffres")]
     private ?string $telephone = null;
 
     #[ORM\Column(length: 50)]
@@ -40,11 +41,13 @@ class Client
     /**
      * @var Collection<int, Dette>
      */
-    #[ORM\OneToMany(targetEntity: Dette::class, mappedBy: 'client', orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: Dette::class, mappedBy: 'client', orphanRemoval: true, cascade: ['persist'])]
     private Collection $dettes;
 
     public function __construct()
     {
+        $this->createAt = new \DateTimeImmutable();
+        $this->updateAt = new \DateTimeImmutable();
         $this->dettes = new ArrayCollection();
     }
 

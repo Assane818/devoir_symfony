@@ -1,99 +1,111 @@
 {% extends 'base.html.twig' %}
 
-{% block body %}
+{% block body %}z
 
 <div class="flex justify-center items-center w-4/5 h-screen">
-    <div class="flex flex-col sm:rounded-lg items-end w-9/12 bg-gray-100 p-5 ml-28 shadow-lg mt-12"
-        style="height: 80vh; max-height: 80vh; border: 2px solid #e2e8f0; border-radius: 10px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);">
+    <div class="flex flex-col sm:rounded-lg items-end w-9/12 bg-gray-100 p-5 ml-28 mt-12 shadow-lg"
+        style="max-height: 75vh; overflow-y: auto; border: 2px solid #e2e8f0">
 
         <!-- Titre du form en haut du cadre -->
         <div class="w-full bg-gray-200 rounded-lg p-4 shadow-md mb-4">
             <h2 class="text-xl font-semibold text-gray-800 text-center">Ajouter un Client</h2>
         </div>
 
-        <!-- Formulaire de recherche -->
+        <!-- Formulaire ajout client -->
         <div class="w-full">
-            <div class="" id="formClient">
+            <div id="formClient">
                 {{ form_start(formClient) }}
                 {{ form_start(formUser) }}
 
                 {{ form_row(formClient.username, {
                 'attr': {
-                'class': 'block w-full border-b-2 border-indigo-500 bg-transparent focus:border-indigo-700 sm:text-sm
-                text-gray-700 placeholder-gray-400 focus:outline-none p-3 rounded',
+                'class': 'block w-full rounded-full bg-violet-100 text-xl border-2 border-purple-500 p-4 placeholder-purple-400 focus:text-violet-950 focus:border-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500',
                 'placeholder': "Nom d'Utilisateur",
                 }
                 }) }}
-                {{ form_errors(formClient.username) }}
+                <div class="text-red-700 mt-2 mb-2 ml-5 font-serif">
+                    {{ form_errors(formClient.username) }}
+                </div>
+                
 
                 {{ form_row(formClient.telephone, {
                 'attr': {
-                'class': 'block w-full border-b-2 border-indigo-500 bg-transparent focus:border-indigo-700 sm:text-sm
-                text-gray-700 placeholder-gray-400 focus:outline-none p-3 rounded',
+                'class': 'block w-full rounded-full bg-violet-100 text-xl border-2 border-purple-500 p-4 placeholder-purple-400 focus:text-violet-950 focus:border-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500',
                 'placeholder': "Téléphone",
                 }
                 }) }}
-                {{ form_errors(formClient.telephone) }}
+                <div class="text-red-700 mt-2 mb-2 ml-5 font-serif">
+                    {{ form_errors(formClient.telephone) }}
+                </div>
 
                 {{ form_row(formClient.address, {
                 'attr': {
-                'class': 'block w-full border-b-2 border-indigo-500 bg-transparent focus:border-indigo-700 sm:text-sm
-                text-gray-700 placeholder-gray-400 focus:outline-none p-3 rounded',
+                'class': 'block w-full rounded-full bg-violet-100 text-xl border-2 border-purple-500 p-4 placeholder-purple-400 focus:text-violet-950 focus:border-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500',
                 'placeholder': "Adresse",
                 }
                 }) }}
-                {{ form_errors(formClient.address) }}
+                <div class="text-red-700 mt-2 mb-2 ml-5 font-serif">
+                    {{ form_errors(formClient.address) }}
+                </div>
 
             </div>
-            <div class="hidden" id="formUser">
+            <!-- Formulaire ajout user -->
+            <div id="formUser" class="mt-10 hidden">
+                <div class="w-full bg-gray-200 rounded-lg p-4 shadow-md mb-4">
+                    <h2 class="text-xl font-semibold text-gray-800 text-center">Ajouter un Utilisateur</h2>
+                </div>
                 {{ form_row(formUser.nom, {
                 'attr': {
-                'class': 'block w-full border-b-2 border-indigo-500 bg-transparent focus:border-indigo-700 sm:text-sm
-                text-gray-700 placeholder-gray-400 focus:outline-none p-3 rounded',
+                'class': 'block w-full rounded-full bg-violet-100 text-xl border-2 border-purple-500 p-4 placeholder-purple-400 focus:text-violet-950 focus:border-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500',
                 'placeholder': "Nom",
-
                 }
                 }) }}
-                {{ form_errors(formUser.nom) }}
+                <div class="text-red-700 mt-2 mb-2 ml-5 font-serif">
+                    {{ form_errors(formUser.nom) }}
+                </div>
 
                 {{ form_row(formUser.prenom, {
                 'attr': {
-                'class': 'block w-full border-b-2 border-indigo-500 bg-transparent focus:border-indigo-700 sm:text-sm
-                text-gray-700 placeholder-gray-400 focus:outline-none p-3 rounded mb-2',
-                'placeholder': "Prenom",
+                'class': 'block w-full rounded-full bg-violet-100 text-xl border-2 border-purple-500 p-4 placeholder-purple-400 focus:text-violet-950 focus:border-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500',
+                'placeholder': "Prénom",
                 }
                 }) }}
+                <div class="text-red-700 mt-2 mb-2 ml-5 font-serif">
+                    {{ form_errors(formUser.prenom) }}
+                </div>
 
-                {{ form_errors(formUser.prenom) }}
                 {{ form_row(formUser.login, {
                 'attr': {
-                'class': 'block w-full border-b-2 border-indigo-500 bg-transparent focus:border-indigo-700 sm:text-sm
-                text-gray-700 placeholder-gray-400 focus:outline-none p-3 rounded',
-                'placeholder': "adresse e-mail",
+                'class': 'block w-full rounded-full bg-violet-100 text-xl border-2 border-purple-500 p-4 placeholder-purple-400 focus:text-violet-950 focus:border-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500',
+                'placeholder': "Adresse e-mail",
                 }
                 }) }}
-                {{ form_errors(formUser.login) }}
+                <div class="text-red-700 mt-2 mb-2 ml-5 font-serif">
+                    {{ form_errors(formUser.login) }}
+                </div>
 
                 {{ form_row(formUser.password, {
                 'attr': {
-                'class': 'block w-full border-b-2 border-indigo-500 bg-transparent focus:border-indigo-700 sm:text-sm
-                text-gray-700 placeholder-gray-400 focus:outline-none p-3 rounded',
+                'class': 'block w-full rounded-full bg-violet-100 text-xl border-2 border-purple-500 p-4 placeholder-purple-400 focus:text-violet-950 focus:border-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500',
                 'placeholder': "Mot de passe",
                 }
                 }) }}
-                {{ form_errors(formUser.password) }}
+                <div class="text-red-700 mt-2 mb-2 ml-5 font-serif">
+                    {{ form_errors(formUser.password) }}
+                </div>
             </div>
+
             <!-- Ajout d'une toggle switch -->
-            <div class="mt-2">
+            <div class="mt-2 overflow-hidden">
                 <label class="inline-flex items-center cursor-pointer">
-                    <input type="checkbox" value="" class="sr-only peer" id="toggleSwitch">
+                    <input type="checkbox" value="on" class="sr-only peer hidden" id="toggleSwitch" name="toggleSwitch" >
                     <div
-                        class="relative w-14 h-7 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-green-300 dark:peer-focus:ring-green-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[4px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-6 after:w-6 after:transition-all dark:border-gray-600 peer-checked:bg-green-600">
+                        class="relative w-14 h-7 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-green-300 dark:peer-focus:ring-green-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:- peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[4px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-6 after:w-6 after:transition-all dark:border-gray-600 peer-checked:bg-green-600">
                     </div>
-                    <span class="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300">Create User
-                        🤵🏾‍♂️</span>
+                    <span class="ms-3 text-sm font-medium dark:text-gray-900">Créer un Utilisateur 🤵🏾‍♂️</span>
                 </label>
             </div>
+
             <div>
                 {{ form_widget(formClient, {
                 'attr': {
@@ -103,16 +115,13 @@
                 }) }}
             </div>
 
-
-
             {{ form_end(formClient) }} {# Fin du formulaire #}
             {{ form_end(formUser) }} {# Fin du formulaire User #}
         </div>
-
     </div>
-
-
 </div>
+
+
 
 
 

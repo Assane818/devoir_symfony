@@ -7,8 +7,10 @@ use App\Entity\Client;
 use App\Entity\User;
 use App\Form\ClientSearchType;
 use App\Form\ClientType;
+use App\Form\SelectDetteType;
 use App\Form\UserType;
 use App\Repository\ClientRepository;
+use App\Repository\DetteRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -18,21 +20,29 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class ClientController extends AbstractController
 {
-    #[Route('/clients', name: 'clients.index', methods: ['GET'])]
+    #[Route('/clients', name: 'clients.index', methods: ['GET', 'POST'])]
     public function index(ClientRepository $clientRepository, Request $request): Response
     {
         $page = $request->query->getInt('page', 1);
-        $limit = $request->query->getInt('limit', 3);
-        $clients = $clientRepository->showPaginated($page, $limit);
-        $totalClients = $clientRepository->countClients();
-        $totalPages = ceil($totalClients / $limit);
-        $clientSeach = new ClientSearchDTO();
-        $form = $this->createForm(ClientSearchType::class, $clientSeach);
+        $limit = $request->query->getInt('limit', 4);
+        $count = 0;
+        $maxPage = 0;
+        $clientSearchDto = new ClientSearchDTO();
+        $form = $this->createForm(ClientSearchType::class, $clientSearchDto);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $clients = $clientRepository->searchClients($clientSearchDto, $page, $limit);
+            $count = $clients->count();
+        } else {
+            $clients = $clientRepository->paginateClients($page, $limit);
+            $count = $clients->count();
+        }
+        $maxPage = ceil($count / $limit);
         return $this->render('client/index.html.twig', [
             'formClientSearch' => $form->createView(),
             'clients' => $clients,
             'currentPage' => $page,
-            'totalPages' => $totalPages,
+            'maxPages' => $maxPage,
         ]);
     }
 
@@ -70,14 +80,12 @@ class ClientController extends AbstractController
         $form1 = $this->createForm(UserType::class, $user);
         $form->handleRequest($request);
         $form1->handleRequest($request);
+        $toggleSwitch = $request->request->get('toggleSwitch');
         if ($form->isSubmitted()) {
             $errorsClient = $validator->validate($client);
-            if ($user->getNom() != null || $user->getPrenom() != null || $user->getLogin() != null || $user->getPassword() != null) {
+            if ($toggleSwitch != null) {
                 $errorsUser = $validator->validate($user);
                 if ($errorsClient->count() === 0 && $errorsUser->count() === 0) {
-                    $user->setCreateAt(new \DateTimeImmutable());
-                    $user->setUpdateAt(new \DateTimeImmutable());
-                    $user->setBlocked(false);
                     $entityManager->persist($user);
                     $client->setUsers($user);
                 } else {
@@ -90,8 +98,6 @@ class ClientController extends AbstractController
                 }
             }
             if (count($errorsClient) === 0) {
-                $client->setCreateAt(new \DateTimeImmutable());
-                $client->setUpdateAt(new \DateTimeImmutable());
                 $entityManager->persist($client);
                 $entityManager->flush();
                 return $this->redirectToRoute('clients.index');
@@ -110,26 +116,32 @@ class ClientController extends AbstractController
         ]);
     }
 
-    #[Route('/clients', name: 'clients.search')]
-    public function search(Request $request, ClientRepository $clientRepository): Response
+    #[Route('/clients/dette', name: 'clients.dette', methods: ['GET', 'POST'])]
+    public function dettesClient(Request $request, DetteRepository $detteRepository): Response
     {
         $page = $request->query->getInt('page', 1);
-        $limit = $request->query->getInt('limit', 3);
-        $clients = $clientRepository->showPaginated($page, $limit);
-        $clientSearchDto = new ClientSearchDTO();
-        $form = $this->createForm(ClientSearchType::class, $clientSearchDto);
+        $limit = $request->query->getInt('limit', 4);
+        $maxPage = 0;
+        $id = $request->query->get('id');
+        $count = 0;
+        $maxPage = 0;
+        $form = $this->createForm(SelectDetteType::class);
         $form->handleRequest($request);
-        $totalClients = $clientRepository->countClients($clientSearchDto->getTelephone(), $clientSearchDto->getUsername());
-        $totalPages = ceil($totalClients / $limit);
-        if ($form->isSubmitted()) {
-            $clients = $clientRepository->searchClients($clientSearchDto);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $dettes = $detteRepository->getDetteFiltre($form->get('montant')->getData(), $id);
+            $count = $dettes->count();
+            $maxPage = ceil($count / $limit);
+        } else {
+            $dettes = $detteRepository->getDetteClient($id, $page, $limit);
+            $count = $dettes->count();
+            $maxPage = ceil($count / $limit);
         }
-        return $this->render('client/index.html.twig', [
-            'formClientSearch' => $form->createView(),
-            'clients' => $clients,
+        return $this->render('client/detteClient.html.twig', [
+            'dettes' => $dettes,
             'currentPage' => $page,
-            'totalPages' => $totalPages,
-
+            'maxPages' => $maxPage,
+            'formselectDette' => $form->createView(),
         ]);
     }
+
 }

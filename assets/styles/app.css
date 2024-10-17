@@ -8,12 +8,13 @@ body {
     justify-content: center;
     align-items: center;
     height: 100vh;
+    font-family: cursive;
 }
 
 header {
-    position: fixed; /* Utiliser fixed pour le garder en haut */
-    top: 0; /* Le placer en haut de la page */
-    left: 64px; /* Ajustez selon la largeur de votre sidebar */
-    right: 0; /* S'étendre sur toute la largeur */
-    z-index: 50; /* Assurez-vous que cela soit au-dessus de la sidebar */
+    position: fixed;
+    top: 0; 
+    left: 64px;
+    right: 0;
+    z-index: 50;
 }

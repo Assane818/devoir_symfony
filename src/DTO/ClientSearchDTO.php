@@ -3,28 +3,16 @@ namespace App\DTO;
 
 class ClientSearchDTO
 {
-    private ?string $telephone = null;
-    private ?string $username = null;
+    private ?string $data = null;
 
-    public function getTelephone(): ?string
+    public function getData(): ?string
     {
-        return $this->telephone;
+        return $this->data;
     }
 
-    public function setTelephone(?string $telephone): self
+    public function setData(?string $data): self
     {
-        $this->telephone = $telephone;
-        return $this;
-    }
-
-    public function getUsername(): ?string
-    {
-        return $this->username;
-    }
-
-    public function setUsername(?string $username): self
-    {
-        $this->username = $username;
+        $this->data = $data;
         return $this;
     }
 }

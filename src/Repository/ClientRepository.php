@@ -7,8 +7,6 @@ use App\Entity\Client;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 use Doctrine\Persistence\ManagerRegistry;
-use Knp\Component\Pager\PaginatorInterface;
-
 /**
  * @extends ServiceEntityRepository<Client>
  */
@@ -19,51 +17,31 @@ class ClientRepository extends ServiceEntityRepository
         parent::__construct($registry, Client::class);
     }
 
-    public function searchClients(ClientSearchDTO $clientSearchDTO): array
+    public function searchClients(ClientSearchDTO $clientSearchDTO, int $page, int $limit): Paginator
     {
-        $queryBuilder = $this->createQueryBuilder('c');
-        if ($clientSearchDTO->getTelephone()) {
-            $queryBuilder->andWhere('c.telephone = :telephone')->setParameter('telephone', $clientSearchDTO->getTelephone());
+        $query = $this->createQueryBuilder('c');
+        if ($clientSearchDTO->getData()) {
+            $query->andWhere('c.telephone = :data OR c.username = :data')
+                        ->setParameter('data', $clientSearchDTO->getData())
+                        ->setFirstResult(($page - 1) * $limit)
+                        ->setMaxResults($limit)
+                        ->orderBy('c.id', 'ASC')
+                        ->getQuery();
+                        
         }
-        if ($clientSearchDTO->getUsername()) {
-            $queryBuilder->andWhere('c.username = :username')->setParameter('username', $clientSearchDTO->getUsername());
-        }
-        return $queryBuilder->getQuery()->getResult();
+        return new Paginator($query);
     }
 
-    public function showPaginated(int $page, int $limit)
+    public function paginateClients(int $page, int $limit): Paginator
     {
+        $query = $this->createQueryBuilder('c')
+                    ->setFirstResult(($page - 1) * $limit)
+                    ->setMaxResults($limit)
+                    ->orderBy('c.id', 'ASC')
+                    ->getQuery();
 
-        $offset = ($page - 1) * $limit;
-        return $this->createQueryBuilder('c')
-            ->setFirstResult($offset)
-            ->setMaxResults($limit)
-            ->getQuery()
-            ->getResult();
-    }
-
-    public function countClients($telephone = null, $username = null): int
-    {
-        if ($telephone != null && $username == null) {
-            return $this->createQueryBuilder('c')
-                ->select('COUNT(c)')
-                ->where('c.telephone = :telephone')
-                ->setParameter('telephone', $telephone)
-                ->getQuery()
-                ->getSingleScalarResult();
-        } elseif ($telephone == null && $username != null) {
-            return $this->createQueryBuilder('c')
-                ->select('COUNT(c)')
-                ->where('c.username = :username')
-                ->setParameter('username', $username)
-                ->getQuery()
-                ->getSingleScalarResult();
-        } else {
-            return $this->createQueryBuilder('c')
-                ->select('COUNT(c)')
-                ->getQuery()
-                ->getSingleScalarResult();
-        }
+        return new Paginator($query);
+        
     }
 
     //    /**
