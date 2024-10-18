@@ -30,6 +30,7 @@ document.addEventListener('DOMContentLoaded', function() {
     toggleSwitch.addEventListener('click', function() {
         if (toggleSwitch.checked) {
             formUser.classList.remove('hidden');
+            formClient.classList.add('hidden');
         } else {
             formClient.classList.remove('hidden');
             formUser.classList.add('hidden');

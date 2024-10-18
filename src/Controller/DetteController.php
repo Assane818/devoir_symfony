@@ -30,7 +30,7 @@ class DetteController extends AbstractController
         ]);
     }
 
-    #[Route('/dettes/store', name: 'dettes.store', methods: ['GET', 'POST'])]
+    #[Route('/dettes/store{id?}', name: 'dettes.store', methods: ['GET', 'POST'])]
     public function store(Request $request, EntityManagerInterface $entityManager): Response
     {
         $dette = new Dette();

@@ -13,10 +13,17 @@
         <!-- Formulaire de recherche -->
         <div class="w-full flex -mb-6 justify-start">
             <div>{{ form_start(formClientSearch) }}</div>
-            {{ form_row(formClientSearch.data, {
+            {{ form_row(formClientSearch.username, {
                 'attr': {
                     'class': 'px-2 py-2 border border-blue-600 rounded-lg mr-2 h-9 text-gray-700 focus:outline-none shadow-lg focus:shadow-indigo-700',
-                    'placeholder': 'Username ou telephone'
+                    'placeholder': 'Username'
+                }
+            }) }}
+            
+            {{ form_row(formClientSearch.telephone, {
+                'attr': {
+                    'class': 'px-4 py-2 border border-blue-600 rounded-lg mr-2 h-9 text-gray-700 focus:outline-none shadow-lg focus:shadow-indigo-700',
+                    'placeholder': 'Téléphone'
                 }
             }) }}
             {{ form_row(formClientSearch.search, {
@@ -24,9 +31,6 @@
                     'class': 'px-4 text-white bg-blue-600 rounded hover:bg-blue-500 transition duration-300 h-9 shadow-lg'
                 }
             })}}
-            <div class="text-red-700 -ml-80 font-serif mt-10 -mb-6">
-                {{ form_errors(formClientSearch.data) }}
-            </div>
             {{ form_end(formClientSearch) }}
         </div>
         

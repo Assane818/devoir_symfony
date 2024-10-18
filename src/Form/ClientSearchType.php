@@ -18,14 +18,8 @@ class ClientSearchType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('data', TextType::class, [
-                'required' => false,
-                'constraints' => [
-                    new NotBlank([
-                        'message' => 'Ce champ ne peut pas être vide',
-                    ]),
-                ],
-            ])
+            ->add('telephone')
+            ->add('username')
             // ->add('address')
             // ->add('username', TextType::class, [
             //     'required' => false,

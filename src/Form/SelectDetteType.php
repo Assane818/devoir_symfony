@@ -2,6 +2,7 @@
 
 namespace App\Form;
 
+use App\Enum\StatutDette;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -17,9 +18,11 @@ class SelectDetteType extends AbstractType
         $builder
             ->add('montant', ChoiceType::class, [
                 'choices' => [
-                    'Solde' => 'Solde',
-                    'Non solde' => 'nonSolde',
+                    'Solde' => StatutDette::Solde,
+                    'Non Solde' => StatutDette::NonSolde,
                 ],
+                'multiple' => true,
+                'expanded' => true,
                 'required' => false,
                 'placeholder' => "Type de dette",
                 'constraints' => [

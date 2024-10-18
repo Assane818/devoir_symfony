@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Dette;
+use App\Enum\StatutDette;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 use Doctrine\Persistence\ManagerRegistry;
@@ -20,44 +21,43 @@ class DetteRepository extends ServiceEntityRepository
     public function getDetteClient(int $id, int $page, int $limit): Paginator
     {
         $query = $this->createQueryBuilder('d')
-                    ->andWhere('d.client = :id')
-                    ->setParameter('id', $id)
-                    ->setFirstResult(($page - 1) * $limit)
-                    ->setMaxResults($limit)
-                    ->orderBy('d.id', 'ASC')
-                    ->getQuery();
+            ->andWhere('d.client = :id')
+            ->setParameter('id', $id)
+            ->setFirstResult(($page - 1) * $limit)
+            ->setMaxResults($limit)
+            ->orderBy('d.id', 'ASC')
+            ->getQuery();
 
         return new Paginator($query);
-        
     }
 
-    public function getDetteFiltre(string $type, int $id): Paginator
+    public function getDetteFiltre(array $types, int $id): Paginator
     {
-        if ($type == 'Solde') {
-            $query = $this->createQueryBuilder('d')
-                        ->where('d.montant = d.montantVerser AND d.client = :id')
-                        ->setParameter('id', $id)
-                        ->getQuery();
-        } else {
-            $query = $this->createQueryBuilder('d')
-                        ->where('d.montant != d.montantVerser AND d.client = :id')
-                        ->setParameter('id', $id)
-                        ->getQuery();
+        foreach ($types as $type) {
+            if ($type == StatutDette::Solde) {
+                $query = $this->createQueryBuilder('d')
+                    ->where('d.montant = d.montantVerser AND d.client = :id')
+                    ->setParameter('id', $id)
+                    ->getQuery();
+            } elseif ($type == StatutDette::NonSolde) {
+                $query = $this->createQueryBuilder('d')
+                    ->where('d.montant != d.montantVerser AND d.client = :id')
+                    ->setParameter('id', $id)
+                    ->getQuery();
+            }
         }
-
         return new Paginator($query);
     }
 
     public function paginatedettes(int $page, int $limit): Paginator
     {
         $query = $this->createQueryBuilder('c')
-                    ->setFirstResult(($page - 1) * $limit)
-                    ->setMaxResults($limit)
-                    ->orderBy('c.id', 'ASC')
-                    ->getQuery();
+            ->setFirstResult(($page - 1) * $limit)
+            ->setMaxResults($limit)
+            ->orderBy('c.id', 'ASC')
+            ->getQuery();
 
         return new Paginator($query);
-        
     }
 
     //    /**

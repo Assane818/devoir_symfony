@@ -7,6 +7,7 @@ use App\Entity\Client;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 use Doctrine\Persistence\ManagerRegistry;
+
 /**
  * @extends ServiceEntityRepository<Client>
  */
@@ -20,28 +21,30 @@ class ClientRepository extends ServiceEntityRepository
     public function searchClients(ClientSearchDTO $clientSearchDTO, int $page, int $limit): Paginator
     {
         $query = $this->createQueryBuilder('c');
-        if ($clientSearchDTO->getData()) {
-            $query->andWhere('c.telephone = :data OR c.username = :data')
-                        ->setParameter('data', $clientSearchDTO->getData())
-                        ->setFirstResult(($page - 1) * $limit)
-                        ->setMaxResults($limit)
-                        ->orderBy('c.id', 'ASC')
-                        ->getQuery();
-                        
+        if ($clientSearchDTO->getTelephone()) {
+            $query->andWhere('c.telephone = :telephone')
+                ->setParameter('telephone', $clientSearchDTO->getTelephone());
         }
+        if ($clientSearchDTO->getUsername()) {
+            $query->andWhere('c.username = :username')
+                ->setParameter('username', $clientSearchDTO->getUsername());
+        }
+        $query->setFirstResult(($page - 1) * $limit)
+            ->setMaxResults($limit)
+            ->orderBy('c.id', 'ASC')
+            ->getQuery();
         return new Paginator($query);
     }
 
     public function paginateClients(int $page, int $limit): Paginator
     {
         $query = $this->createQueryBuilder('c')
-                    ->setFirstResult(($page - 1) * $limit)
-                    ->setMaxResults($limit)
-                    ->orderBy('c.id', 'ASC')
-                    ->getQuery();
+            ->setFirstResult(($page - 1) * $limit)
+            ->setMaxResults($limit)
+            ->orderBy('c.id', 'ASC')
+            ->getQuery();
 
         return new Paginator($query);
-        
     }
 
     //    /**
